@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎯 Roda da Prosperidade — Instituto Impulso IE™</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{--bg1:#0b4aa2;--bg2:#062b62;--surface:#f4f9ff;--card:#ffffff;
+      --text:#0f172a;--muted:#475569;--primary:#0b63ce;--primary2:#084aa0;
+      --accent:#38bdf8;--border:#cfe6ff;--shadow:0 14px 34px rgba(2,32,71,0.18);
+      --shadow2:0 8px 20px rgba(2,32,71,0.12);--radius:18px;--radius2:14px;}
+    *,*::before,*::after{box-sizing:border-box;}html,body{height:100%;}
+    body{margin:0;font-family:"Poppins",system-ui,-apple-system,sans-serif;
+      background:radial-gradient(1200px 700px at 20% 10%,rgba(56,189,248,0.35),transparent 55%),
+        radial-gradient(900px 600px at 85% 15%,rgba(255,215,0,0.1),transparent 60%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;padding:12px;}
+    .container{max-width:1200px;margin:0 auto;
+      background:linear-gradient(180deg,rgba(244,249,255,0.97),rgba(244,249,255,0.94));
+      border:1px solid rgba(56,189,248,0.35);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden;position:relative;}
+    .container::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;
+      background:linear-gradient(90deg,var(--accent),var(--primary));}
+    .wrap{padding:22px;}
+    .header{text-align:center;padding:10px 0 20px;margin-bottom:14px;
+      border-bottom:1px solid rgba(11,99,206,0.08);}
+    .main-title{margin:0;font-family:Arial,sans-serif;font-size:18px;font-weight:normal;
+      color:#64748b;letter-spacing:0.12em;text-transform:uppercase;line-height:1.2;}
+    .tagline{margin:6px 0 18px;font-weight:700;color:#0b2a52;font-size:13px;
+      letter-spacing:0.02em;font-family:Arial,sans-serif;}
+    .sub-title{margin:0;font-family:Arial,sans-serif;font-size:34px;line-height:1.15;
+      color:#063b7a;font-weight:900;letter-spacing:-0.01em;}
+    .header-desc{margin:12px auto 0;max-width:90ch;color:var(--muted);font-size:14px;
+      font-weight:normal;text-align:center;}
+    .card{background:var(--card);border:1px solid rgba(207,230,255,0.95);
+      border-radius:var(--radius2);box-shadow:var(--shadow2);padding:18px;}
+    .instructions{background:linear-gradient(180deg,rgba(56,189,248,0.14),rgba(56,189,248,0.08));
+      border:1px solid rgba(56,189,248,0.25);border-left:6px solid var(--accent);
+      border-radius:var(--radius2);padding:18px;margin:14px 0 18px;color:var(--text);}
+    .instructions p,.instructions li{margin:0 0 12px;font-size:14px;color:var(--text);text-align:justify;}
+    .instructions strong{color:#063b7a;font-family:Arial,sans-serif;}
+    .grid-form{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;}
+    @media (max-width:650px){.grid-form{grid-template-columns:1fr;}.wrap{padding:14px;}
+      .sub-title{font-size:26px;}.main-title{font-size:15px;}.header-desc{font-size:13px;}}
+    .form-group label{display:block;font-weight:800;color:#063b7a;margin-bottom:8px;
+      font-size:14px;font-family:Arial,sans-serif;}
+    .form-group input,.form-group select{width:100%;padding:14px;
+      border:1.5px solid rgba(11,99,206,0.28);border-radius:12px;font-size:15px;
+      background:#fff;outline:none;transition:box-shadow .2s,border-color .2s;
+      font-family:"Poppins",sans-serif;}
+    .form-group input:focus,.form-group select:focus{
+      border-color:rgba(11,99,206,0.55);box-shadow:0 0 0 4px rgba(56,189,248,0.22);}
+    .field-error{display:block;margin-top:6px;font-size:12px;font-weight:700;
+      color:#dc2626;font-family:Arial,sans-serif;min-height:16px;}
+    .input-error{border-color:#dc2626 !important;box-shadow:0 0 0 3px rgba(220,38,38,0.12) !important;}
+    .step{display:none;}.step.active{display:block;}
+    .topbar{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;
+      justify-content:space-between;margin:10px 0 12px;}
+    .counter{font-weight:800;color:#0b2a52;font-size:14px;font-family:Arial,sans-serif;}
+    .progress-meta{font-weight:700;color:var(--muted);font-size:13px;font-family:Arial,sans-serif;}
+    .progress-bar{width:100%;background:#e6eefc;border-radius:999px;overflow:hidden;
+      height:12px;border:1px solid rgba(11,99,206,0.12);}
+    .progress-fill{height:100%;width:0%;border-radius:999px;
+      background:linear-gradient(90deg,var(--accent),var(--primary));transition:width .35s;}
+    .area-badge{display:inline-block;background:linear-gradient(45deg,var(--primary),var(--primary2));
+      color:#fff;padding:6px 18px;border-radius:999px;font-size:12px;font-weight:800;
+      font-family:Arial,sans-serif;text-transform:uppercase;letter-spacing:0.06em;
+      margin-bottom:10px;box-shadow:0 4px 12px rgba(11,99,206,0.2);}
+    .question-title{margin:0 0 10px;font-size:23px;font-weight:700;color:#0f172a;
+      text-align:center;min-height:80px;display:flex;align-items:center;
+      justify-content:center;line-height:1.4;padding:0 8px;}
+    @media (max-width:650px){.question-title{font-size:18px;min-height:96px;}}
+    .scale-labels{display:flex;justify-content:space-between;margin:0 0 4px;
+      font-size:11px;color:var(--muted);font-weight:700;font-family:Arial,sans-serif;}
+    .options{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;
+      gap:8px;margin-top:14px;}
+    .opt{border:1.5px solid rgba(11,99,206,0.2);background:rgba(11,99,206,0.05);
+      border-radius:14px;padding:12px 8px;cursor:pointer;user-select:none;
+      transition:transform .12s,box-shadow .2s,border-color .2s,background .2s;
+      min-height:62px;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;text-align:center;font-weight:600;color:#0b2a52;
+      flex:0 1 calc(9.09% - 8px);min-width:62px;-webkit-tap-highlight-color:transparent;}
+    .opt .opt-number{font-size:24px;font-weight:900;font-family:Arial,sans-serif;line-height:1;}
+    .opt .opt-label{font-size:8px;font-weight:700;color:var(--muted);margin-top:3px;
+      font-family:Arial,sans-serif;}
+    @media (max-width:820px){.opt{flex:0 1 calc(16.66% - 8px);min-width:52px;}}
+    @media (max-width:480px){.opt{flex:0 1 calc(20% - 8px);min-width:48px;padding:10px 6px;}
+      .opt .opt-number{font-size:20px;}}
+    .opt:hover{transform:translateY(-2px);box-shadow:0 12px 18px rgba(2,32,71,0.12);
+      border-color:rgba(56,189,248,0.55);}
+    .opt.selected,.opt[aria-checked="true"]{
+      background:linear-gradient(45deg,var(--primary),var(--primary2));
+      border-color:rgba(11,99,206,0.55);color:#fff;
+      box-shadow:0 14px 22px rgba(11,99,206,0.22);font-weight:700;}
+    .opt.selected .opt-label{color:rgba(255,255,255,0.8);}
+    .nav{display:flex;gap:10px;justify-content:space-between;margin-top:14px;flex-wrap:wrap;}
+    .btn{appearance:none;border:none;cursor:pointer;border-radius:14px;padding:12px 16px;
+      font-size:14px;font-weight:800;transition:transform .12s,box-shadow .2s,filter .2s;
+      display:inline-flex;align-items:center;gap:10px;font-family:Arial,sans-serif;
+      -webkit-tap-highlight-color:transparent;}
+    .btn-primary{background:linear-gradient(45deg,var(--primary),var(--primary2));
+      color:#fff;box-shadow:0 10px 18px rgba(11,99,206,0.22);}
+    .btn-primary:hover{transform:translateY(-1px);filter:saturate(1.05);
+      box-shadow:0 14px 26px rgba(11,99,206,0.3);}
+    .btn-primary:disabled,.btn:disabled{opacity:0.55;cursor:not-allowed;
+      transform:none !important;box-shadow:none !important;}
+    .btn-ghost{background:#fff;color:#0b2a52;border:1.5px solid rgba(11,99,206,0.22);
+      box-shadow:0 8px 16px rgba(2,32,71,0.08);}
+    .btn-ghost:hover{border-color:rgba(11,99,206,0.4);box-shadow:0 10px 20px rgba(2,32,71,0.12);}
+    .result-hero{text-align:center;margin-top:10px;}
+    .result-hero h2{margin:0;font-size:28px;font-weight:900;color:#063b7a;font-family:Arial,sans-serif;}
+    .score-display{margin:20px auto;display:flex;justify-content:center;gap:28px;flex-wrap:wrap;}
+    .score-circle{width:150px;height:150px;border-radius:50%;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;border:5px solid var(--primary);
+      background:linear-gradient(135deg,rgba(11,99,206,0.08),rgba(56,189,248,0.06));
+      box-shadow:0 8px 24px rgba(11,99,206,0.15);}
+    .score-circle .score-value{font-size:38px;font-weight:900;color:#063b7a;
+      font-family:Arial,sans-serif;line-height:1;}
+    .score-circle .score-label{font-size:10px;font-weight:800;color:var(--muted);
+      text-transform:uppercase;font-family:Arial,sans-serif;margin-top:4px;}
+    .status{font-family:Arial,sans-serif;font-weight:bold;color:#0b63ce;
+      min-height:22px;margin-top:8px;}
+    .success-box{margin-top:14px;background:rgba(16,185,129,0.1);
+      border:1px solid rgba(16,185,129,0.4);padding:16px;border-radius:12px;
+      text-align:center;display:none;}
+    .result-grid{display:grid;grid-template-columns:420px 1fr;gap:16px;
+      margin-top:14px;align-items:start;}
+    @media (max-width:1080px){.result-grid{grid-template-columns:1fr;}}
+    .left-column,.right-column{display:grid;gap:14px;align-content:start;}
+    .summary-shell,.chart-card,.force-map-card,.donut-card,.insight-box,.final-analysis{
+      background:#fff;border:1px solid #d5e6fb;border-radius:20px;padding:18px;
+      box-shadow:var(--shadow2);overflow:hidden;}
+    .summary-shell h3,.chart-card h3,.force-map-card h3,.donut-card h3,.final-analysis h3{
+      margin:0 0 14px;color:#12284b;font-size:20px;font-weight:900;font-family:Arial,sans-serif;}
+    .summary-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media (max-width:720px){.summary-cards{grid-template-columns:1fr;}}
+    .summary-card{background:#fff;border:1.5px solid #d8e7fb;border-radius:24px;
+      padding:16px 18px;min-height:110px;box-shadow:0 4px 12px rgba(2,32,71,0.04);
+      display:flex;flex-direction:column;justify-content:center;}
+    .summary-label{font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
+      color:#64748b;font-weight:900;font-family:Arial,sans-serif;margin-bottom:6px;}
+    .summary-big-word{font-size:18px;line-height:1.1;color:#063b7a;font-weight:900;
+      font-family:Arial,sans-serif;margin-bottom:6px;}
+    .summary-sub{font-size:13px;line-height:1.5;color:#475569;font-weight:700;
+      font-family:Arial,sans-serif;}
+    .panel-subtitle{margin:-4px 0 14px;color:#64748b;font-size:12.5px;font-weight:700;
+      font-family:Arial,sans-serif;line-height:1.45;}
+    .rank-list{display:grid;gap:12px;}
+    .rank-item{border-radius:16px;padding:14px;border:1px solid #dbeafe;background:#fff;
+      box-shadow:0 4px 10px rgba(2,32,71,0.05);}
+    .rank-item-head{display:flex;justify-content:space-between;align-items:flex-start;
+      gap:10px;margin-bottom:8px;}
+    .rank-item-name{font-size:15px;font-weight:900;color:#12284b;
+      font-family:Arial,sans-serif;line-height:1.2;}
+    .rank-item-label{font-size:11px;font-weight:800;color:#64748b;
+      font-family:Arial,sans-serif;text-transform:uppercase;}
+    .rank-badge{display:inline-flex;align-items:center;justify-content:center;
+      border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;
+      font-family:Arial,sans-serif;text-transform:uppercase;white-space:nowrap;}
+    .badge-high{background:#dcfce7;color:#166534;}
+    .badge-mid{background:#fef3c7;color:#92400e;}
+    .badge-low{background:#fee2e2;color:#991b1b;}
+    .bar-track{width:100%;height:13px;background:linear-gradient(90deg,#edf4ff,#e7effc);
+      border-radius:999px;overflow:hidden;border:1px solid rgba(11,99,206,0.1);
+      box-shadow:inset 0 1px 2px rgba(2,32,71,0.06);}
+    .bar-fill{height:100%;width:0%;border-radius:999px;transition:width .6s;position:relative;}
+    .bar-fill::after{content:"";position:absolute;top:0;right:0;bottom:0;width:32px;
+      background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,0.35));}
+    .fill-high{background:linear-gradient(90deg,#14b8a6,#0f766e);}
+    .fill-mid{background:linear-gradient(90deg,#fb923c,#ea580c);}
+    .fill-low{background:linear-gradient(90deg,#f87171,#dc2626);}
+    .rank-desc{font-size:13px;color:#334155;line-height:1.65;margin:0;text-align:justify;}
+    .items-grid{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0 6px;}
+    .item-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;
+      font-family:Arial,sans-serif;font-weight:700;color:#334155;background:#f8fafc;
+      padding:4px 10px;border-radius:999px;border:1px solid #e2e8f0;}
+    .item-chip .chip-score{font-weight:900;padding:1px 6px;border-radius:999px;
+      font-size:11px;color:#fff;}
+    .chip-high{background:#16a34a;}.chip-mid{background:#d97706;}.chip-low{background:#dc2626;}
+    .client-box{padding:18px;border-radius:20px;border:1px solid rgba(11,99,206,0.14);
+      background:linear-gradient(180deg,rgba(244,249,255,1),rgba(232,241,255,1));
+      box-shadow:0 4px 12px rgba(2,32,71,0.05);}
+    .client-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;
+      font-size:13px;color:#334155;}
+    @media (max-width:720px){.client-grid{grid-template-columns:1fr;}}
+    .client-grid strong{color:#063b7a;font-family:Arial,sans-serif;}
+    .force-map-wrap{width:100%;overflow-x:auto;padding:10px 0;}
+    .force-map-svg{width:100%;min-height:500px;display:block;background:#fff;}
+    .donut-wrap{width:100%;display:flex;justify-content:center;padding:10px 0;}
+    .donut-svg{width:100%;max-width:480px;height:auto;display:block;}
+    @media (max-width:768px){.force-map-svg{min-height:380px;}}
+    .donut-legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:14px;
+      font-size:12px;font-family:Arial,sans-serif;}
+    @media (max-width:520px){.donut-legend{grid-template-columns:1fr;}}
+    .legend-item{display:flex;align-items:center;gap:8px;color:#334155;font-weight:700;}
+    .legend-color{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+    .legend-value{margin-left:auto;color:#063b7a;font-weight:900;}
+    .area-table{width:100%;border-collapse:collapse;margin-top:10px;}
+    .area-table th{background:linear-gradient(45deg,var(--primary),var(--primary2));
+      color:#fff;padding:10px 14px;font-size:12px;font-weight:800;
+      font-family:Arial,sans-serif;text-transform:uppercase;text-align:left;}
+    .area-table th:first-child{border-radius:10px 0 0 0;}
+    .area-table th:last-child{border-radius:0 10px 0 0;}
+    .area-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid #e2e8f0;font-weight:600;}
+    .area-table tr:nth-child(even){background:rgba(11,99,206,0.03);}
+    .insight-box{border-left:5px solid var(--primary);}
+    .insight-box h4{margin:0 0 6px;font-size:14px;font-weight:900;
+      font-family:Arial,sans-serif;text-transform:uppercase;}
+    .insight-box p{margin:0;font-size:12.5px;color:#334155;text-align:justify;line-height:1.8;}
+    /* ===== FINAL ANALYSIS ===== */
+    .final-analysis{border-left:6px solid var(--primary);background:linear-gradient(180deg,#f8fcff,#eef6ff);}
+    .final-grade{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+      padding:16px;background:#fff;border-radius:14px;border:1px solid #d5e6fb;margin-bottom:14px;}
+    .final-grade-circle{width:110px;height:110px;border-radius:50%;display:flex;
+      flex-direction:column;align-items:center;justify-content:center;
+      color:#fff;font-family:Arial,sans-serif;flex-shrink:0;
+      box-shadow:0 8px 20px rgba(2,32,71,0.18);}
+    .final-grade-circle .fg-num{font-size:36px;font-weight:900;line-height:1;}
+    .final-grade-circle .fg-of{font-size:11px;font-weight:700;opacity:0.9;margin-top:2px;}
+    .final-grade-info{flex:1;min-width:200px;}
+    .final-grade-cat{font-size:22px;font-weight:900;color:#12284b;font-family:Arial,sans-serif;
+      margin-bottom:4px;}
+    .final-grade-emoji{font-size:18px;}
+    .final-grade-desc{font-size:13px;color:#475569;font-weight:700;font-family:Arial,sans-serif;}
+    .final-text{font-size:13.5px;color:#334155;line-height:1.75;text-align:justify;
+      margin:0 0 12px;}
+    .final-text strong{color:#063b7a;font-family:Arial,sans-serif;}
+    .grade-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px;}
+    @media (max-width:700px){.grade-scale{grid-template-columns:repeat(2,1fr);}}
+    .grade-step{padding:8px 6px;border-radius:10px;text-align:center;font-family:Arial,sans-serif;
+      font-size:10px;font-weight:800;color:#fff;opacity:0.45;transition:opacity .3s;}
+    .grade-step.active{opacity:1;transform:scale(1.05);box-shadow:0 6px 14px rgba(0,0,0,0.18);}
+    .grade-step .gs-range{font-size:9px;display:block;opacity:0.95;margin-top:2px;}
+    .btn-download-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:22px;}
+    .footer{margin-top:20px;text-align:center;color:var(--muted);font-size:12px;
+      font-weight:700;font-family:Arial,sans-serif;padding-bottom:10px;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+    .fade-up{animation:fadeUp .5s ease-out forwards;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="wrap">
+      <div class="header">
+        <p class="main-title">Instituto Impulso IE™</p>
+        <p class="tagline">A mudança pode acontecer em um instante</p>
+        <h1 class="sub-title">🎯 Roda da Prosperidade</h1>
+        <p class="header-desc">
+          Descubra como está o equilíbrio das 10 áreas que sustentam uma vida próspera, 
+          rica e com propósito. Uma análise simples e direta que mostra onde você está forte 
+          e onde precisa girar a roda para conquistar mais.
+        </p>
+      </div>
+
+      <!-- ===== STEP INTRO ===== -->
+      <section id="step-intro" class="step active">
+        <div class="instructions">
+          <p><strong>Como está girando a sua Roda da Prosperidade?</strong></p>
+          <p>
+            Esta análise vai te mostrar, de forma clara e simples, como estão as 
+            <strong>10 áreas</strong> que sustentam uma vida próspera: começando pelas mais 
+            básicas (Saúde, Emoções, Propósito) e indo até as mais avançadas 
+            (Negócios, Patrimônio e Tecnologia).
+          </p>
+          <p>
+            Cada área tem <strong>5 perguntas práticas e fáceis de entender</strong>. 
+            Responda numa escala simples de <strong>0 a 10</strong>:
+          </p>
+          <p style="color:#0b63ce">
+            <strong>0</strong> = Não faço / Não tenho &nbsp;•&nbsp;
+            <strong>5</strong> = Mais ou menos / Tô tentando &nbsp;•&nbsp;
+            <strong>10</strong> = Faço muito bem / Domino
+          </p>
+          <p>
+            No final você ganha um <strong>relatório completo em PDF</strong> com seu Score, 
+            gráfico em forma de roda, gráfico de pizza, ranking das áreas e
+            <strong>uma análise final com nota geral</strong> classificando você em uma
+            das 5 categorias de prosperidade.
+          </p>
+          <p>Responda com <strong>verdade</strong>. Quanto mais honesto, mais útil será o resultado.</p>
+        </div>
+
+        <div class="card" style="width:100%;max-width:760px;margin:0 auto;padding:32px 24px;">
+          <div class="grid-form">
+            <div class="form-group">
+              <label for="name">Nome e Sobrenome *</label>
+              <input type="text" id="name" placeholder="Ex: João Silva"
+                oninput="validateForm()" onblur="validateForm()" />
+              <span id="name-error" class="field-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="whatsapp">WhatsApp *</label>
+              <input type="text" id="whatsapp" placeholder="(11)99999-9999"
+                oninput="maskWhatsApp(this);validateForm();" onblur="validateForm()" />
+              <span id="whatsapp-error" class="field-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail *</label>
+              <input type="email" id="email" placeholder="email@exemplo.com"
+                oninput="validateForm()" onblur="validateForm()" />
+              <span id="email-error" class="field-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="age">Idade *</label>
+              <input type="number" id="age" placeholder="Ex: 35"
+                oninput="validateForm()" onblur="validateForm()" min="10" max="120" />
+              <span id="age-error" class="field-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="education">Escolaridade</label>
+              <select id="education">
+                <option value="">Selecione...</option>
+                <option value="Ensino Médio">Ensino Médio</option>
+                <option value="Superior Incompleto">Superior Incompleto</option>
+                <option value="Superior Completo">Superior Completo</option>
+                <option value="Pós-graduação/MBA">Pós-graduação / MBA</option>
+                <option value="Mestrado/Doutorado">Mestrado / Doutorado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="profession">Profissão</label>
+              <input type="text" id="profession" placeholder="Ex: Empresário" />
+            </div>
+          </div>
+          <div class="nav" style="justify-content:center;margin-top:32px">
+            <button id="start-btn" onclick="startTest()" class="btn btn-primary"
+              type="button"
+              style="width:100%;max-width:340px;justify-content:center;padding:14px;font-size:16px"
+              disabled>Começar Roda da Prosperidade</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== STEP QUIZ ===== -->
+      <section id="step-quiz" class="step">
+        <div class="topbar">
+          <div class="counter">Pergunta <span id="q-current">1</span> de 50</div>
+          <div class="progress-meta"><span id="answered-count">0</span>/50 respondidas</div>
+        </div>
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <div class="card" style="margin-top:12px;padding:30px">
+          <div style="text-align:center">
+            <span id="area-badge" class="area-badge">ÁREA</span>
+            <span id="item-counter-badge"
+              style="display:inline-block;margin-left:8px;background:#e0f2fe;color:#0369a1;
+              padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;
+              font-family:Arial,sans-serif;">Pergunta 1 de 5</span>
+          </div>
+          <p id="question-text" class="question-title"></p>
+          <div class="scale-labels">
+            <span>0 — Não faço</span>
+            <span>5 — Mais ou menos</span>
+            <span>10 — Faço muito bem</span>
+          </div>
+          <div id="options" class="options"></div>
+          <div class="nav" style="margin-top:30px">
+            <button id="btn-prev" class="btn btn-ghost" type="button" onclick="goPrev()">◀ Voltar</button>
+            <button id="btn-skip" class="btn btn-ghost" type="button" onclick="goNext()" style="font-size:12px">Pular ▶</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== STEP RESULTS ===== -->
+      <section id="step-results" class="step">
+        <div class="result-hero fade-up">
+          <h2>🎯 Resultado — Roda da Prosperidade</h2>
+          <p style="margin:4px 0 0;color:#64748b;font-size:13px;font-family:Arial,sans-serif;font-weight:700;">
+            Método Impulso • Instituto Impulso IE™
+          </p>
+          <div class="score-display">
+            <div class="score-circle">
+              <div class="score-value" id="total-score">0</div>
+              <div class="score-label">Score / 500</div>
+            </div>
+            <div class="score-circle">
+              <div class="score-value" id="avg-score">0</div>
+              <div class="score-label">Nota Média</div>
+            </div>
+            <div class="score-circle" id="classification-circle" style="border-color:#16a34a">
+              <div class="score-value" id="class-label" style="font-size:16px;color:#16a34a">-</div>
+              <div class="score-label">Categoria</div>
+            </div>
+          </div>
+          <p id="auto-send-status" class="status">⏳ Gerando relatório...</p>
+          <div id="final-success-message" class="success-box">
+            <p style="margin:0;font-size:18px;font-family:Arial,sans-serif;font-weight:bold;color:#065f46;">✅ Relatório Pronto!</p>
+            <p style="margin:6px 0 0;font-size:14px;color:#047857">
+              Seu resultado completo foi processado.
+            </p>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <div class="left-column">
+            <div class="summary-shell fade-up">
+              <h3>Resumo da Sua Roda</h3>
+              <div class="summary-cards">
+                <div class="summary-card">
+                  <div class="summary-label">🏆 Área Mais Forte</div>
+                  <div class="summary-big-word" id="topAreaName">-</div>
+                  <div class="summary-sub" id="topAreaScore">-</div>
+                </div>
+                <div class="summary-card">
+                  <div class="summary-label">📈 Onde Crescer Mais</div>
+                  <div class="summary-big-word" id="lowAreaName">-</div>
+                  <div class="summary-sub" id="lowAreaScore">-</div>
+                </div>
+                <div class="summary-card">
+                  <div class="summary-label">📊 Score Total</div>
+                  <div class="summary-big-word" id="summaryTotalScore">-</div>
+                  <div class="summary-sub" id="summaryTotalPct">-</div>
+                </div>
+                <div class="summary-card">
+                  <div class="summary-label">🎯 Categoria</div>
+                  <div class="summary-big-word" id="summaryClassification">-</div>
+                  <div class="summary-sub" id="summaryClassDesc">-</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="force-map-card fade-up">
+              <h3 style="text-align:center;margin-bottom:6px">🎡 Sua Roda da Prosperidade</h3>
+              <p style="margin:0 0 8px;color:#64748b;font-size:12px;text-align:center;
+                font-family:Arial,sans-serif;font-weight:700;">
+                Quanto mais redonda, mais equilibrada está sua vida
+              </p>
+              <div class="force-map-wrap">
+                <svg id="radarSvg" viewBox="0 0 900 720" class="force-map-svg"></svg>
+              </div>
+            </div>
+
+            <div class="donut-card fade-up">
+              <h3 style="text-align:center;margin-bottom:6px">🍩 Distribuição em Pizza</h3>
+              <p style="margin:0 0 8px;color:#64748b;font-size:12px;text-align:center;
+                font-family:Arial,sans-serif;font-weight:700;">
+                Veja como cada área contribui no seu resultado total
+              </p>
+              <div class="donut-wrap">
+                <svg id="donutSvg" viewBox="0 0 400 400" class="donut-svg"></svg>
+              </div>
+              <div id="donutLegend" class="donut-legend"></div>
+            </div>
+
+            <div class="summary-shell fade-up">
+              <h3>Tabela de Resultados por Área</h3>
+              <div style="overflow-x:auto">
+                <table class="area-table">
+                  <thead>
+                    <tr>
+                      <th style="width:40px">#</th>
+                      <th>Área</th>
+                      <th style="width:65px">Total</th>
+                      <th style="width:65px">Média</th>
+                      <th style="width:90px">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="area-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="client-box fade-up">
+              <h3 style="margin:0 0 12px;color:#12284b;font-size:18px;font-weight:900;
+                font-family:Arial,sans-serif;">Seus Dados</h3>
+              <div id="personal-data" class="client-grid"></div>
+            </div>
+
+            <div class="insight-box fade-up" style="border-left-color:#0f766e">
+              <h4 style="color:#0f766e">🟢 Áreas Fortes (Média 8-10)</h4>
+              <p>
+                Essas são as áreas onde você manda bem! Use elas como 
+                <strong>alavanca</strong> pra puxar as outras pra cima. Quem trabalha 
+                a partir dos pontos fortes é <strong>6x mais engajado</strong> 
+                e <strong>3x mais produtivo</strong>.
+              </p>
+            </div>
+            <div class="insight-box fade-up" style="border-left-color:#ea580c">
+              <h4 style="color:#ea580c">🟡 Áreas Pra Melhorar (Média 5-7)</h4>
+              <p>
+                Aqui tá o <strong>maior potencial de crescimento</strong>. Pequenas 
+                ações já geram saltos grandes. Cada ponto que você ganha aqui tem 
+                <strong>efeito multiplicador</strong> no resultado total.
+              </p>
+            </div>
+            <div class="insight-box fade-up" style="border-left-color:#dc2626">
+              <h4 style="color:#dc2626">🔴 Áreas Críticas (Média 0-4)</h4>
+              <p>
+                <strong>Atenção total aqui!</strong> 1) <strong>Estude</strong> sobre o tema; 
+                2) <strong>Mentoria</strong>: ande com quem domina isso; 
+                3) <strong>Aja já</strong>: comece com pequenos hábitos diários.
+              </p>
+            </div>
+          </div>
+
+          <div class="right-column">
+            <div class="chart-card fade-up">
+              <h3>Ranking das 10 Áreas</h3>
+              <p class="panel-subtitle">
+                Da mais forte à mais fraca — com os 5 pontos detalhados de cada área.
+              </p>
+              <div id="ranking-results" class="rank-list"></div>
+            </div>
+
+            <!-- ===== ANÁLISE FINAL — NOVO ===== -->
+            <div class="final-analysis fade-up" id="finalAnalysisCard">
+              <h3>🏁 Análise Final</h3>
+              <div class="final-grade" id="finalGradeBox">
+                <div class="final-grade-circle" id="finalGradeCircle">
+                  <div class="fg-num" id="finalGradeNum">0</div>
+                  <div class="fg-of">de 10</div>
+                </div>
+                <div class="final-grade-info">
+                  <div class="final-grade-cat">
+                    <span class="final-grade-emoji" id="finalGradeEmoji">🌱</span>
+                    <span id="finalGradeCategory">-</span>
+                  </div>
+                  <div class="final-grade-desc" id="finalGradeShort">-</div>
+                </div>
+              </div>
+              <p class="final-text" id="finalAnalysisText">-</p>
+              <div class="grade-scale" id="gradeScale"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-download-row fade-up">
+          <button id="btn-download" onclick="downloadPDFHandler()" class="btn btn-primary" style="padding:14px 36px;font-size:15px">
+            📄 Baixar Relatório PDF Completo
+          </button>
+          <button onclick="restartTest()" class="btn btn-ghost" style="padding:14px 28px;font-size:14px">
+            🔄 Refazer Análise
+          </button>
+        </div>
+        <p class="footer">
+          Método Impulso — Instituto Impulso IE™ | 🎯 Roda da Prosperidade
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // CONFIG
+    // ============================================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwjhkNBN52xYbhIlKVIc6L3KCJdFFS-5IidChlqBUZrEgkffFDd-jWZls2r__Jk0BrCDw/exec";
+    const API_KEY = "2026Impulso$";
+    const PESQUISA_NOME = "Roda da Prosperidade";
+
+    let autoSendInProgress=false,autoSendDone=false,emailSendAttempts=0;
+    const MAX_EMAIL_ATTEMPTS=3;
+    let current=0;const TOTAL_Q=50;
+    let responses=new Array(TOTAL_Q).fill(null);
+    let answeringLocked=false;let computedResults=null;
+
+    // ============================================================
+    // 10 ÁREAS — PERGUNTAS SIMPLES, SEM JARGÕES
+    // Ordenadas por maturidade (básico → avançado)
+    // ============================================================
+    const areasData = [
+      {
+        name: "Saúde e Disposição", icon: "💪", color: [220,38,38],
+        items: [
+          "Eu durmo bem à noite e acordo com energia",
+          "Eu como comida saudável quase todos os dias",
+          "Eu faço algum tipo de exercício físico toda semana",
+          "Eu bebo bastante água ao longo do dia",
+          "Eu reservo tempo para descansar e me divertir"
+        ],
+        desc: "Sem saúde, nada funciona. Essa é a base de tudo: energia, ânimo e cabeça boa pra encarar a vida."
+      },
+      {
+        name: "Emoções", icon: "🧠", color: [217,70,239],
+        items: [
+          "Eu consigo deixar pra lá o que já passou e seguir em frente",
+          "Eu controlo minhas reações quando alguém me irrita ou contraria",
+          "Eu aguento firme nos momentos difíceis sem desistir",
+          "Eu sei abrir mão de algo agora pra conquistar algo maior depois",
+          "Eu transformo problemas em aprendizado em vez de ficar preso a eles"
+        ],
+        desc: "Quem domina as próprias emoções domina a vida. É o que segura a barra nos momentos difíceis."
+      },
+      {
+        name: "Propósito", icon: "🔥", color: [234,88,12],
+        items: [
+          "Eu sei quem eu sou e no que eu acredito de verdade",
+          "Eu já me livrei de pensamentos negativos que me travavam",
+          "Eu sei o que eu vim fazer nesta vida e qual é minha missão",
+          "Eu me sinto feliz e realizado com o que faço hoje",
+          "Eu impacto positivamente as pessoas que estão ao meu redor"
+        ],
+        desc: "Propósito é o combustível invisível. Quem sabe pra onde vai, atrai pessoas e oportunidades certas."
+      },
+      {
+        name: "Comunicação", icon: "🎙️", color: [139,92,246],
+        items: [
+          "Minha postura, olhar e gestos passam confiança quando falo",
+          "Eu consigo falar bem em reuniões, apresentações ou em público",
+          "Eu sei mudar o tom da voz pra prender a atenção das pessoas",
+          "Eu falo de forma clara e direta, sem enrolar",
+          "Eu escolho bem as palavras na hora de me expressar"
+        ],
+        desc: "Quem comunica bem, vende, lidera e influencia. É como você leva sua mensagem pro mundo."
+      },
+      {
+        name: "Rede de Contatos", icon: "🤝", color: [20,184,166],
+        items: [
+          "Eu costumo ajudar as pessoas antes de pedir algo em troca",
+          "Eu observo e aprendo com pessoas que já alcançaram sucesso",
+          "Eu costumo frequentar lugares e eventos novos pra crescer",
+          "Eu cuido bem da minha imagem e do que as pessoas falam de mim",
+          "Eu cultivo minhas amizades e contatos com atenção e cuidado"
+        ],
+        desc: "Sua rede de contatos vale ouro. Conhecer e ser conhecido abre portas e acelera tudo."
+      },
+      {
+        name: "Multiplicar Pessoas", icon: "🎯", color: [202,138,4],
+        items: [
+          "Eu costumo atrair pessoas talentosas pra perto de mim",
+          "Eu sei escolher gente boa quando preciso contratar ou formar equipe",
+          "Eu faço perguntas que ajudam as pessoas a pensarem melhor",
+          "Eu sei ensinar e desenvolver as habilidades de outras pessoas",
+          "Eu costumo dar chance e oportunidade pras pessoas crescerem"
+        ],
+        desc: "Ninguém constrói algo grande sozinho. Saber formar e multiplicar pessoas é multiplicar resultados."
+      },
+      {
+        name: "Gestão", icon: "⚙️", color: [21,101,192],
+        items: [
+          "Eu planejo bem meu tempo e organizo bem minhas tarefas",
+          "Eu sou produtivo e consigo entregar o que prometo",
+          "Eu sei liderar e motivar as pessoas que trabalham comigo",
+          "Eu crio rotinas e processos que funcionam mesmo sem minha presença",
+          "Eu acompanho meus números e resultados de perto (vendas, gastos, metas)"
+        ],
+        desc: "Gestão é o que transforma ideia em entrega. Organização, processos e liderança fazem você crescer."
+      },
+      {
+        name: "Negócios", icon: "💼", color: [249,168,37],
+        items: [
+          "Eu sei comprar bem, pesquisar preço e barganhar",
+          "Eu sei vender meus produtos, serviços ou ideias com confiança",
+          "Eu sei negociar e conseguir vantagens nos acordos que faço",
+          "Eu tenho participação ou sou sócio em mais de um negócio",
+          "Eu costumo criar e tirar do papel projetos e novas ideias"
+        ],
+        desc: "Negócios são os motores que geram dinheiro de verdade. Comprar, vender, negociar e criar."
+      },
+      {
+        name: "Finanças e Patrimônio", icon: "💰", color: [15,118,110],
+        items: [
+          "Eu recebo lucros, comissões ou rendimentos extras todo mês",
+          "Eu tenho dinheiro entrando mesmo quando não estou trabalhando (aluguel, juros, royalties)",
+          "Eu já tenho condições de viver da minha renda sem depender de salário",
+          "Eu acumulo dinheiro e bens, e sei como proteger o que conquistei",
+          "Eu invisto meu dinheiro em coisas diferentes (poupança, ações, imóveis, fundos, etc.)"
+        ],
+        desc: "É aqui que dinheiro vira liberdade e liberdade vira legado. Resultado de tudo que vem antes."
+      },
+      {
+        name: "Tecnologia", icon: "🚀", color: [6,78,59],
+        items: [
+          "Eu uso programas e aplicativos que me ajudam a vender e a organizar clientes",
+          "Eu tenho um site, perfil profissional ou loja na internet ativa",
+          "Eu uso inteligência artificial (como ChatGPT) ou ferramentas digitais no dia a dia",
+          "Eu invisto em anúncios na internet (Google, Instagram, Facebook) pra atrair clientes",
+          "Eu tenho um sistema que vende ou trabalha por mim mesmo enquanto durmo"
+        ],
+        desc: "Tecnologia é o multiplicador de força. Quem domina ela, domina velocidade, escala e resultados 24h."
+      }
+    ];
+
+    const questionsList = [];
+    areasData.forEach(function(area,areaIdx){
+      area.items.forEach(function(item,itemIdx){
+        questionsList.push({
+          areaIdx:areaIdx,areaName:area.name,areaIcon:area.icon,
+          itemName:item,itemIdx:itemIdx,globalIdx:questionsList.length
+        });
+      });
+    });
+
+    // ============================================================
+    // HELPERS
+    // ============================================================
+    function escapeHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+    function validateEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e||"").trim());}
+    function maskWhatsApp(input){
+      let v=input.value.replace(/\D/g,"");
+      if(v.length>11)v=v.substring(0,11);
+      if(v.length<=10){v=v.replace(/^(\d{2})(\d)/,"($1)$2");v=v.replace(/(\d{4})(\d)/,"$1-$2");}
+      else{v=v.replace(/^(\d{2})(\d)/,"($1)$2");v=v.replace(/(\d{5})(\d)/,"$1-$2");}
+      input.value=v;
+    }
+    function setFieldError(fieldId,errorId,msg){
+      var field=document.getElementById(fieldId);var errorEl=document.getElementById(errorId);
+      if(!field||!errorEl)return false;
+      if(msg){field.classList.add("input-error");errorEl.textContent=msg;return false;}
+      else{field.classList.remove("input-error");errorEl.textContent="";return true;}
+    }
+    function validateForm(){
+      var n=validateNameField();var e=validateEmailField();
+      var w=validateWhatsAppField();var a=validateAgeField();
+      document.getElementById("start-btn").disabled=!(n&&e&&w&&a);
+    }
+    function validateNameField(){
+      var name=document.getElementById("name").value.trim();
+      var parts=name.split(/\s+/).filter(Boolean);
+      if(!name)return setFieldError("name","name-error","Informe seu nome e sobrenome.");
+      if(parts.length<2)return setFieldError("name","name-error","Digite nome e sobrenome.");
+      if(parts[1].length<2)return setFieldError("name","name-error","Preencha nome e sobrenome válidos.");
+      return setFieldError("name","name-error","");
+    }
+    function validateEmailField(){
+      var email=document.getElementById("email").value.trim();
+      if(!email)return setFieldError("email","email-error","Informe seu e-mail.");
+      if(!validateEmail(email))return setFieldError("email","email-error","Digite um e-mail válido.");
+      return setFieldError("email","email-error","");
+    }
+    function validateWhatsAppField(){
+      var w=document.getElementById("whatsapp").value.trim();
+      if(!w)return setFieldError("whatsapp","whatsapp-error","Informe seu WhatsApp.");
+      if(!/^\(\d{2}\)\d{4,5}-\d{4}$/.test(w))return setFieldError("whatsapp","whatsapp-error","Formato: (11)99999-9999");
+      return setFieldError("whatsapp","whatsapp-error","");
+    }
+    function validateAgeField(){
+      var age=document.getElementById("age").value.trim();
+      if(!age)return setFieldError("age","age-error","Informe sua idade.");
+      var n=parseInt(age,10);
+      if(isNaN(n)||n<10||n>120)return setFieldError("age","age-error","Idade entre 10 e 120.");
+      return setFieldError("age","age-error","");
+    }
+    function toTitleCase(str){
+      if(!str)return "";
+      var lowers=["da","de","do","das","dos","e"];
+      return String(str).toLowerCase().split(" ").map(function(word,index){
+        if(index>0&&lowers.includes(word))return word;
+        return word.charAt(0).toUpperCase()+word.slice(1);
+      }).join(" ");
+    }
+    function showStep(stepId){
+      document.querySelectorAll(".step").forEach(function(s){s.classList.remove("active");});
+      document.getElementById(stepId).classList.add("active");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    // ============================================================
+    // QUIZ NAVIGATION
+    // ============================================================
+    function startTest(){
+      if(!validateNameField()||!validateEmailField()||!validateWhatsAppField()||!validateAgeField())return;
+      current=0;responses=new Array(TOTAL_Q).fill(null);computedResults=null;
+      autoSendDone=false;autoSendInProgress=false;emailSendAttempts=0;
+      showStep("step-quiz");renderQuestion();updateProgressUI();
+    }
+    function restartTest(){showStep("step-intro");current=0;
+      responses=new Array(TOTAL_Q).fill(null);computedResults=null;}
+    function renderQuestion(){
+      if(current<0)current=0;if(current>=TOTAL_Q)current=TOTAL_Q-1;
+      var q=questionsList[current];
+      document.getElementById("q-current").textContent=current+1;
+      document.getElementById("area-badge").textContent=q.areaIcon+" "+q.areaName;
+      document.getElementById("item-counter-badge").textContent="Pergunta "+(q.itemIdx+1)+" de 5";
+      document.getElementById("question-text").textContent=q.itemName;
+      var optionsEl=document.getElementById("options");optionsEl.innerHTML="";
+      for(var v=0;v<=10;v++){
+        var div=document.createElement("div");
+        var isSelected=responses[current]===v;
+        div.className="opt"+(isSelected?" selected":"");
+        div.setAttribute("role","radio");
+        div.setAttribute("aria-checked",isSelected?"true":"false");
+        div.setAttribute("tabindex","0");
+        div.dataset.value=String(v);
+        var label="";
+        if(v===0)label="Nada";else if(v===5)label="Médio";else if(v===10)label="Total";
+        div.innerHTML='<span class="opt-number">'+v+'</span>'+
+          (label?'<span class="opt-label">'+label+'</span>':'');
+        (function(val){
+          div.addEventListener("click",function(){selectAnswer(val);},{passive:true});
+          div.addEventListener("keydown",function(e){
+            if(e.key==="Enter"||e.key===" "){e.preventDefault();selectAnswer(val);}
+          });
+        })(v);
+        optionsEl.appendChild(div);
+      }
+      document.getElementById("btn-prev").disabled=current===0;
+    }
+    function updateProgressUI(){
+      var answered=responses.filter(function(v){return v!==null;}).length;
+      document.getElementById("answered-count").textContent=answered;
+      document.getElementById("progress-fill").style.width=Math.round((answered/TOTAL_Q)*100)+"%";
+    }
+    function goPrev(){if(answeringLocked||current<=0)return;current--;renderQuestion();updateProgressUI();}
+    function goNext(){if(answeringLocked||current>=TOTAL_Q-1)return;current++;renderQuestion();updateProgressUI();}
+    function selectAnswer(value){
+      if(answeringLocked)return;
+      answeringLocked=true;responses[current]=value;
+      var children=document.getElementById("options").children;
+      for(var i=0;i<children.length;i++){
+        var c=children[i];var isSelected=c.dataset.value===String(value);
+        c.classList.toggle("selected",isSelected);
+        c.setAttribute("aria-checked",isSelected?"true":"false");
+        c.style.pointerEvents="none";
+      }
+      updateProgressUI();
+      setTimeout(function(){
+        try{
+          var answeredCount=responses.filter(function(r){return r!==null;}).length;
+          if(answeredCount>=TOTAL_Q){answeringLocked=false;processResults();return;}
+          if(current<TOTAL_Q-1){current++;renderQuestion();updateProgressUI();}
+          else{
+            var firstUnanswered=-1;
+            for(var j=0;j<TOTAL_Q;j++){if(responses[j]===null){firstUnanswered=j;break;}}
+            if(firstUnanswered!==-1){current=firstUnanswered;renderQuestion();updateProgressUI();}
+          }
+        }catch(err){console.error("Error:",err);}
+        finally{answeringLocked=false;}
+      },220);
+    }
+
+    // ============================================================
+    // COMPUTE SCORES
+    // ============================================================
+    function computeScores(){
+      var areas=areasData.map(function(area,idx){
+        var startIdx=idx*5;var items=[];
+        for(var i=0;i<5;i++){
+          items.push({name:area.items[i],score:responses[startIdx+i]!==null?responses[startIdx+i]:0});
+        }
+        var total=items.reduce(function(sum,item){return sum+item.score;},0);
+        var avg=Math.round((total/5)*10)/10;
+        return {name:area.name,icon:area.icon,desc:area.desc,color:area.color,
+          items:items,total:total,avg:avg};
+      });
+      var totalScore=areas.reduce(function(sum,area){return sum+area.total;},0);
+      var avgScore=Math.round((totalScore/50)*10)/10;
+      var ranked=areas.slice().sort(function(a,b){return b.total-a.total;});
+      return {areas:areas,ranked:ranked,totalScore:totalScore,avgScore:avgScore};
+    }
+
+    function getProsperidadeCategoria(avg){
+      if(avg>=8.1)return {
+        idx:5, label:"Mestre da Prosperidade", emoji:"👑",
+        short:"Você atingiu um nível de excelência na maioria das áreas.",
+        color:[15,118,110], colorHex:"#0f766e", range:"8.1 — 10.0",
+        text:"Parabéns! Você está num <strong>nível de elite</strong> na sua jornada de prosperidade. Sua roda gira com leveza, suas áreas estão bem equilibradas e você já tem maturidade em quase todas as 10 dimensões. Agora seu foco deve ser <strong>preservar o que conquistou</strong>, <strong>multiplicar pessoas ao seu redor</strong> e <strong>deixar legado</strong>. Continue refinando os pequenos detalhes — é isso que separa os grandes dos eternos. Compartilhe sua experiência, mentore outras pessoas e use sua prosperidade pra impactar vidas. Cuidado pra não estagnar: mestres continuam aprendendo a vida toda."
+      };
+      if(avg>=6.1)return {
+        idx:4, label:"Próspero em Crescimento", emoji:"🚀",
+        short:"Você já caminha com solidez e está em fase de aceleração.",
+        color:[22,163,74], colorHex:"#16a34a", range:"6.1 — 8.0",
+        text:"Muito bom! Você já é uma <strong>pessoa próspera</strong> em construção sólida. Sua roda gira de forma consistente e você tem domínio em várias áreas importantes. Esta é a fase de <strong>acelerar</strong>: identifique as 2 ou 3 áreas com média mais baixa e dê foco total nelas nos próximos meses. É aqui que está seu maior salto. Investir em mentoria, cursos avançados e cercar-se de pessoas mais experientes pode te levar pro próximo nível em pouco tempo. Você está mais perto do topo do que imagina — mantenha o ritmo e a disciplina."
+      };
+      if(avg>=4.1)return {
+        idx:3, label:"Empreendedor em Formação", emoji:"🌳",
+        short:"Você tem boa base, mas precisa equilibrar várias áreas.",
+        color:[202,138,4], colorHex:"#ca8a04", range:"4.1 — 6.0",
+        text:"Você está no <strong>meio do caminho</strong> — uma fase decisiva. Já tem uma base interessante, mas sua roda ainda gira torta porque algumas áreas estão fortes e outras precisam de muita atenção. Esse desequilíbrio é o que está te impedindo de crescer mais rápido. <strong>Foco no plano:</strong> 1) Identifique suas 3 piores áreas; 2) Crie um plano de 90 dias com ações práticas semanais; 3) Procure mentoria em pelo menos uma área crítica. Pequenos ajustes aqui geram saltos enormes. Esta é a hora de profissionalizar sua jornada e parar de fazer tudo no improviso."
+      };
+      if(avg>=2.1)return {
+        idx:2, label:"Construtor Iniciante", emoji:"🌱",
+        short:"Você está começando a construir as bases — atenção urgente.",
+        color:[234,88,12], colorHex:"#ea580c", range:"2.1 — 4.0",
+        text:"Você está em uma <strong>fase inicial e sensível</strong> da jornada. Várias áreas importantes ainda estão pouco desenvolvidas e isso está limitando muito seus resultados. <strong>Mas isso tem solução, e é mais simples do que parece.</strong> Foque agora apenas nas <strong>3 áreas mais básicas</strong>: Saúde, Emoções e Propósito. Sem essas três girando, nenhuma outra anda. Comece com pequenos hábitos diários: 30 min de exercício, 7-8h de sono, leitura de 15 min e clareza sobre o que você quer da vida. Busque um mentor ou um grupo de pessoas que estejam um passo à frente. Cada pequeno avanço aqui muda o jogo inteiro."
+      };
+      return {
+        idx:1, label:"Despertar Necessário", emoji:"⚠️",
+        short:"Hora de acordar e dar o primeiro passo — você consegue!",
+        color:[220,38,38], colorHex:"#dc2626", range:"0.0 — 2.0",
+        text:"Sua roda está <strong>quase parada</strong>, e isso é um chamado pra mudança. <strong>A boa notícia:</strong> reconhecer a situação já é o primeiro grande passo, e você acabou de dar. Não tente arrumar tudo de uma vez — isso só leva à frustração. <strong>Escolha UMA única área</strong> (recomendamos começar pela Saúde ou pelas Emoções) e dedique 30 dias só pra ela. Cuide do sono, da alimentação, do exercício e da sua mente. Procure ajuda profissional se sentir necessidade — terapia, coach, mentor ou grupo de apoio. Lembre-se: <strong>a mudança pode acontecer em um instante</strong>, mas precisa começar com uma única decisão hoje. Você é mais capaz do que está mostrando agora."
+      };
+    }
+
+    function getClassification(avg){
+      if(avg>=9)return {label:"Excepcional",desc:"Sua roda gira lisinho! Performance de elite.",color:"#0f766e"};
+      if(avg>=8)return {label:"Excelente",desc:"Sua roda está muito bem equilibrada.",color:"#16a34a"};
+      if(avg>=7)return {label:"Muito Bom",desc:"Boa consistência com espaço pra crescer mais.",color:"#65a30d"};
+      if(avg>=6)return {label:"Bom",desc:"Base sólida com oportunidades claras.",color:"#ca8a04"};
+      if(avg>=5)return {label:"Em Desenvolvimento",desc:"Tem potencial. Hora de acelerar!",color:"#d97706"};
+      if(avg>=3)return {label:"Atenção",desc:"Algumas áreas precisam de foco urgente.",color:"#ea580c"};
+      return {label:"Crítico",desc:"Sua roda está travada. Hora de agir!",color:"#dc2626"};
+    }
+    function getFillClass(avg){if(avg>=7)return "fill-high";if(avg>=4)return "fill-mid";return "fill-low";}
+    function getBadgeClass(avg){if(avg>=7)return "badge-high";if(avg>=4)return "badge-mid";return "badge-low";}
+    function getBadgeLabel(avg){
+      if(avg>=8)return "Excelente";if(avg>=7)return "Muito Bom";
+      if(avg>=5)return "Em Desenv.";if(avg>=3)return "Atenção";return "Crítico";
+    }
+    function getChipClass(score){if(score>=7)return "chip-high";if(score>=4)return "chip-mid";return "chip-low";}
+
+    // ============================================================
+    // RENDER RESULTS
+    // ============================================================
+    function processResults(){
+      computedResults=computeScores();
+      var areas=computedResults.areas;var ranked=computedResults.ranked;
+      var totalScore=computedResults.totalScore;var avgScore=computedResults.avgScore;
+      var classification=getClassification(avgScore);
+      var categoria=getProsperidadeCategoria(avgScore);
+      computedResults.categoria=categoria;
+
+      showStep("step-results");
+
+      document.getElementById("total-score").textContent=totalScore;
+      document.getElementById("avg-score").textContent=avgScore.toFixed(1);
+      document.getElementById("class-label").textContent=categoria.label;
+      document.getElementById("class-label").style.color=categoria.colorHex;
+      document.getElementById("classification-circle").style.borderColor=categoria.colorHex;
+
+      document.getElementById("topAreaName").textContent=ranked[0].icon+" "+ranked[0].name;
+      document.getElementById("topAreaScore").textContent="Total: "+ranked[0].total+"/50 • Média: "+ranked[0].avg;
+      document.getElementById("lowAreaName").textContent=ranked[9].icon+" "+ranked[9].name;
+      document.getElementById("lowAreaScore").textContent="Total: "+ranked[9].total+"/50 • Média: "+ranked[9].avg;
+      document.getElementById("summaryTotalScore").textContent=totalScore+" / 500";
+      document.getElementById("summaryTotalPct").textContent=Math.round((totalScore/500)*100)+"% do máximo";
+      document.getElementById("summaryClassification").textContent=categoria.label;
+      document.getElementById("summaryClassification").style.color=categoria.colorHex;
+      document.getElementById("summaryClassDesc").textContent=categoria.short;
+
+      // ===== ANÁLISE FINAL =====
+      document.getElementById("finalGradeNum").textContent=avgScore.toFixed(1);
+      document.getElementById("finalGradeCircle").style.background=
+        "linear-gradient(135deg,"+categoria.colorHex+",rgba(0,0,0,0.15))";
+      document.getElementById("finalGradeCircle").style.backgroundColor=categoria.colorHex;
+      document.getElementById("finalGradeCategory").textContent=categoria.label;
+      document.getElementById("finalGradeEmoji").textContent=categoria.emoji;
+      document.getElementById("finalGradeShort").textContent=categoria.short;
+      document.getElementById("finalAnalysisText").innerHTML=categoria.text;
+
+      var allCategorias=[
+        {idx:1,label:"Despertar",emoji:"⚠️",range:"0-2",color:"#dc2626"},
+        {idx:2,label:"Construtor",emoji:"🌱",range:"2.1-4",color:"#ea580c"},
+        {idx:3,label:"Em Formação",emoji:"🌳",range:"4.1-6",color:"#ca8a04"},
+        {idx:4,label:"Próspero",emoji:"🚀",range:"6.1-8",color:"#16a34a"},
+        {idx:5,label:"Mestre",emoji:"👑",range:"8.1-10",color:"#0f766e"}
+      ];
+      var scaleEl=document.getElementById("gradeScale");
+      scaleEl.innerHTML=allCategorias.map(function(c){
+        var active=(c.idx===categoria.idx)?"active":"";
+        return '<div class="grade-step '+active+'" style="background:'+c.color+';">'+
+          '<div>'+c.emoji+' '+c.label+'</div>'+
+          '<span class="gs-range">'+c.range+'</span></div>';
+      }).join("");
+
+      // Ranking
+      var rankEl=document.getElementById("ranking-results");rankEl.innerHTML="";
+      ranked.forEach(function(area,idx){
+        var pct=Math.round((area.avg/10)*100);
+        var itemsHtml=area.items.map(function(it){
+          return '<span class="item-chip">'+escapeHtml(it.name)+
+            ' <span class="chip-score '+getChipClass(it.score)+'">'+it.score+'</span></span>';
+        }).join("");
+        rankEl.innerHTML+='<div class="rank-item fade-up" style="animation-delay:'+idx*60+'ms">'+
+          '<div class="rank-item-head"><div>'+
+          '<div class="rank-item-name">'+(idx+1)+'º — '+area.icon+' '+escapeHtml(area.name)+'</div>'+
+          '<div class="rank-item-label">Total: '+area.total+'/50 | Média: '+area.avg+'</div></div>'+
+          '<span class="rank-badge '+getBadgeClass(area.avg)+'">'+getBadgeLabel(area.avg)+'</span></div>'+
+          '<div class="bar-track" style="margin:8px 0;">'+
+          '<div class="bar-fill '+getFillClass(area.avg)+'" id="bar-'+idx+'" data-pct="'+pct+'"></div></div>'+
+          '<div class="items-grid">'+itemsHtml+'</div>'+
+          '<p class="rank-desc">'+escapeHtml(area.desc)+'</p></div>';
+      });
+
+      // Table
+      var tableBody=document.getElementById("area-table-body");tableBody.innerHTML="";
+      areas.slice().sort(function(a,b){return b.total-a.total;}).forEach(function(area,idx){
+        var sc=area.avg>=7?"#0f766e":area.avg>=4?"#d97706":"#dc2626";
+        tableBody.innerHTML+='<tr>'+
+          '<td style="font-weight:800;color:#063b7a;">'+(idx+1)+'</td>'+
+          '<td>'+area.icon+' '+escapeHtml(area.name)+'</td>'+
+          '<td style="font-weight:800;">'+area.total+'</td>'+
+          '<td style="font-weight:800;">'+area.avg+'</td>'+
+          '<td style="font-weight:800;color:'+sc+';">'+getBadgeLabel(area.avg)+'</td></tr>';
+      });
+
+      // Personal data
+      document.getElementById("personal-data").innerHTML=
+        '<div><strong>Nome:</strong> '+escapeHtml(toTitleCase(document.getElementById("name").value.trim()))+'</div>'+
+        '<div><strong>WhatsApp:</strong> '+escapeHtml(document.getElementById("whatsapp").value.trim())+'</div>'+
+        '<div><strong>E-mail:</strong> '+escapeHtml(document.getElementById("email").value.trim())+'</div>'+
+        '<div><strong>Idade:</strong> '+escapeHtml(document.getElementById("age").value.trim())+' anos</div>'+
+        '<div><strong>Escolaridade:</strong> '+escapeHtml(document.getElementById("education").value||"Não informado")+'</div>'+
+        '<div><strong>Profissão:</strong> '+escapeHtml(document.getElementById("profession").value.trim()||"Não informado")+'</div>'+
+        '<div><strong>Data:</strong> '+new Date().toLocaleDateString("pt-BR")+'</div>'+
+        '<div><strong>Score:</strong> '+totalScore+'/500 ('+avgScore.toFixed(1)+')</div>';
+
+      drawRadar(areas);
+      drawDonut(areas);
+
+      setTimeout(function(){
+        ranked.forEach(function(_,i){
+          var barEl=document.getElementById("bar-"+i);
+          if(barEl)barEl.style.width=barEl.dataset.pct+"%";
+        });
+      },150);
+
+      document.getElementById("auto-send-status").textContent="✅ Análise concluída com sucesso!";
+      document.getElementById("auto-send-status").style.color="#16a34a";
+      document.getElementById("final-success-message").style.display="block";
+
+      try{
+        localStorage.setItem("rdp_lastResult",JSON.stringify({
+          date:new Date().toISOString(),
+          name:document.getElementById("name").value.trim(),
+          totalScore:totalScore,avgScore:avgScore,responses:responses.slice()
+        }));
+      }catch(e){}
+
+      autoSendResults();
+    }
+
+    // ============================================================
+    // CONVERSOR DE SVG PARA BASE64 (Com upscaling para PDF perfeito)
+    // ============================================================
+    function getSvgAsBase64Png(svgElementId, width, height) {
+      return new Promise(function(resolve) {
+        try {
+          var svgElement = document.getElementById(svgElementId);
+          if(!svgElement) { resolve(""); return; }
+          var canvas = document.createElement("canvas");
+          var scale = 2; // Dobro da resolução para não borrar no PDF
+          canvas.width = width * scale;
+          canvas.height = height * scale;
+          var ctx = canvas.getContext("2d");
+          ctx.scale(scale, scale);
+
+          var data = new XMLSerializer().serializeToString(svgElement);
+          if (data.indexOf('xmlns="http://www.w3.org/2000/svg"') === -1) {
+              data = data.replace(/<svg/g, '<svg xmlns="http://www.w3.org/2000/svg"');
+          }
+          var DOMURL = window.URL || window.webkitURL || window;
+          var img = new Image();
+          var svgBlob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
+          var url = DOMURL.createObjectURL(svgBlob);
+          img.onload = function () {
+              ctx.fillStyle = "white"; 
+              ctx.fillRect(0, 0, width, height);
+              ctx.drawImage(img, 0, 0, width, height);
+              DOMURL.revokeObjectURL(url);
+              resolve(canvas.toDataURL("image/png").split(',')[1]);
+          };
+          img.onerror = function() { resolve(""); };
+          img.src = url;
+        } catch(e) {
+          resolve("");
+        }
+      });
+    }
+
+    // ============================================================
+    // AUTO SEND (Gera o PDF invisívelmente e manda pro webhook)
+    // ============================================================
+    async function autoSendResults(){
+      if(autoSendDone||autoSendInProgress)return;
+      autoSendInProgress=true;
+      var areas=computedResults.areas;
+      var totalScore=computedResults.totalScore;var avgScore=computedResults.avgScore;
+      var categoria=computedResults.categoria;
+
+      var radarBase64 = await getSvgAsBase64Png("radarSvg", 900, 720);
+      var donutBase64 = await getSvgAsBase64Png("donutSvg", 400, 400);
+
+      var pdfBase64 = "";
+      try{
+        pdfBase64 = await generatePDF('base64');
+      }catch(e){
+        console.error("Erro gerando PDF silencioso: ", e);
+      }
+
+      var payload={
+        apiKey:API_KEY,pesquisa:PESQUISA_NOME,
+        nome:toTitleCase(document.getElementById("name").value.trim()),
+        email:document.getElementById("email").value.trim(),
+        whatsapp:document.getElementById("whatsapp").value.trim(),
+        idade:document.getElementById("age").value.trim(),
+        escolaridade:document.getElementById("education").value||"Não informado",
+        profissao:document.getElementById("profession").value.trim()||"Não informado",
+        dataHora:new Date().toLocaleString("pt-BR"),
+        scoreTotal:totalScore,mediaGeral:avgScore.toFixed(1),
+        classificacao:categoria.label,respostasRaw:responses.join(","),
+        graficoRadarBase64: radarBase64,
+        graficoPizzaBase64: donutBase64,
+        pdfBase64: pdfBase64
+      };
+      
+      areas.forEach(function(area,idx){
+        payload["area"+(idx+1)+"_nome"]=area.name;
+        payload["area"+(idx+1)+"_total"]=area.total;
+        payload["area"+(idx+1)+"_media"]=area.avg;
+        area.items.forEach(function(item,i){
+          payload["area"+(idx+1)+"_item"+(i+1)]=item.name+":"+item.score;
+        });
+      });
+      
+      try{
+        await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",
+          headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+        autoSendDone=true;
+      }catch(err){
+        emailSendAttempts++;
+        if(emailSendAttempts<MAX_EMAIL_ATTEMPTS)setTimeout(autoSendResults,3000);
+      }finally{autoSendInProgress=false;}
+    }
+
+    // ============================================================
+    // RADAR SVG 
+    // ============================================================
+    function drawRadar(areas){
+      var svg=document.getElementById("radarSvg");
+      svg.setAttribute("viewBox", "0 0 900 720");
+      var cx=450, cy=360, maxR=210, n=areas.length, levels=5;
+      var html="";
+      
+      for(var l=1;l<=levels;l++){
+        var r=(maxR/levels)*l;var pts="";
+        for(var i=0;i<n;i++){
+          var angle=(Math.PI*2*i)/n-Math.PI/2;
+          pts+=(cx+r*Math.cos(angle))+","+(cy+r*Math.sin(angle))+" ";
+        }
+        html+='<polygon points="'+pts+'" fill="none" stroke="#dbeafe" stroke-width="1"/>';
+        html+='<text x="'+(cx+5)+'" y="'+(cy-r+4)+'" font-size="10" fill="#94a3b8" font-family="Arial">'+
+          ((10/levels)*l)+'</text>';
+      }
+      for(var i=0;i<n;i++){
+        var angle=(Math.PI*2*i)/n-Math.PI/2;
+        html+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+maxR*Math.cos(angle))+
+          '" y2="'+(cy+maxR*Math.sin(angle))+'" stroke="#e2e8f0" stroke-width="0.8"/>';
+      }
+      var dataPoints="";var coords=[];
+      for(var i=0;i<n;i++){
+        var angle=(Math.PI*2*i)/n-Math.PI/2;
+        var dataR=(areas[i].avg/10)*maxR;
+        var x=cx+dataR*Math.cos(angle);var yPos=cy+dataR*Math.sin(angle);
+        dataPoints+=x+","+yPos+" ";
+        coords.push({x:x,y:yPos,val:areas[i].avg,name:areas[i].name,icon:areas[i].icon});
+      }
+      html+='<polygon points="'+dataPoints+'" fill="rgba(11,99,206,0.12)" stroke="#0b63ce" stroke-width="2.5"/>';
+      
+      coords.forEach(function(p,i){
+        var dotColor=p.val>=7?"#0f766e":p.val>=4?"#d97706":"#dc2626";
+        html+='<circle cx="'+p.x+'" cy="'+p.y+'" r="8" fill="'+dotColor+'" stroke="#fff" stroke-width="2.5"/>';
+        html+='<text x="'+p.x+'" y="'+(p.y+3.5)+'" text-anchor="middle" font-size="8" font-weight="900" fill="#fff" font-family="Arial">'+p.val+'</text>';
+        
+        var angle=(Math.PI*2*i)/n-Math.PI/2;
+        var labelR=maxR+40;
+        var lx=cx+labelR*Math.cos(angle);var ly=cy+labelR*Math.sin(angle);
+        
+        var anchor="middle";
+        if(Math.cos(angle)>0.3)anchor="start";else if(Math.cos(angle)<-0.3)anchor="end";
+        
+        html+='<text x="'+lx+'" y="'+ly+'" text-anchor="'+anchor+
+          '" font-size="12" font-weight="800" fill="#0f172a" font-family="Arial">'+
+          p.icon+' '+p.name+'</text>';
+        html+='<text x="'+lx+'" y="'+(ly+15)+'" text-anchor="'+anchor+
+          '" font-size="10" font-weight="700" fill="'+dotColor+'" font-family="Arial">Média: '+p.val+'</text>';
+      });
+      svg.innerHTML=html;
+    }
+
+    // ============================================================
+    // DONUT/PIZZA SVG
+    // ============================================================
+    function drawDonut(areas){
+      var svg=document.getElementById("donutSvg");
+      var cx=200,cy=200,outerR=150,innerR=85;
+      var totalSum=areas.reduce(function(s,a){return s+a.total;},0);
+      if(totalSum===0)totalSum=1;
+      var html="";
+      var startAngle=-Math.PI/2;
+      areas.forEach(function(area){
+        var sliceAngle=(area.total/totalSum)*Math.PI*2;
+        if(sliceAngle<=0.001)sliceAngle=0.001;
+        var endAngle=startAngle+sliceAngle;
+        var x1=cx+outerR*Math.cos(startAngle);
+        var y1=cy+outerR*Math.sin(startAngle);
+        var x2=cx+outerR*Math.cos(endAngle);
+        var y2=cy+outerR*Math.sin(endAngle);
+        var x3=cx+innerR*Math.cos(endAngle);
+        var y3=cy+innerR*Math.sin(endAngle);
+        var x4=cx+innerR*Math.cos(startAngle);
+        var y4=cy+innerR*Math.sin(startAngle);
+        var largeArc=sliceAngle>Math.PI?1:0;
+        var c=area.color;
+        var fillColor="rgb("+c[0]+","+c[1]+","+c[2]+")";
+        var d="M "+x1+" "+y1+
+          " A "+outerR+" "+outerR+" 0 "+largeArc+" 1 "+x2+" "+y2+
+          " L "+x3+" "+y3+
+          " A "+innerR+" "+innerR+" 0 "+largeArc+" 0 "+x4+" "+y4+" Z";
+        html+='<path d="'+d+'" fill="'+fillColor+'" stroke="#fff" stroke-width="2" opacity="0.9"/>';
+        var pct=Math.round((area.total/totalSum)*100);
+        if(pct>=7){
+          var midAngle=startAngle+sliceAngle/2;
+          var labelR=(outerR+innerR)/2;
+          var lx=cx+labelR*Math.cos(midAngle);
+          var ly=cy+labelR*Math.sin(midAngle);
+          html+='<text x="'+lx+'" y="'+(ly+3)+'" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="Arial">'+pct+'%</text>';
+        }
+        startAngle=endAngle;
+      });
+      html+='<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-size="14" font-weight="800" fill="#64748b" font-family="Arial">Total</text>';
+      html+='<text x="'+cx+'" y="'+(cy+18)+'" text-anchor="middle" font-size="28" font-weight="900" fill="#063b7a" font-family="Arial">'+totalSum+'</text>';
+      html+='<text x="'+cx+'" y="'+(cy+34)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#94a3b8" font-family="Arial">de 500</text>';
+      svg.innerHTML=html;
+
+      var legendEl=document.getElementById("donutLegend");
+      var legendHtml="";
+      areas.forEach(function(area){
+        var c=area.color;
+        var pct=Math.round((area.total/totalSum)*100);
+        legendHtml+='<div class="legend-item">'+
+          '<span class="legend-color" style="background:rgb('+c[0]+','+c[1]+','+c[2]+')"></span>'+
+          '<span>'+area.icon+' '+escapeHtml(area.name)+'</span>'+
+          '<span class="legend-value">'+pct+'%</span></div>';
+      });
+      legendEl.innerHTML=legendHtml;
+    }
+  </script>
+
+  <!-- ============================================================ -->
+  <!-- PDF GENERATOR — COM INJEÇÃO PERFEITA DAS IMAGENS DA TELA -->
+  <!-- ============================================================ -->
+  <script>
+    function fillTriangle(doc,x1,y1,x2,y2,x3,y3){
+      doc.lines([[x2-x1,y2-y1],[x3-x2,y3-y2],[x1-x3,y1-y3]],x1,y1,[1,1],"F",true);
+    }
+
+    function drawWealthSymbol(doc,cx,cy,scale){
+      var s=scale||1;
+      var dw=30*s,dh=40*s;
+      doc.setFillColor(11,42,82);
+      fillTriangle(doc,cx,cy-dh/2,cx+dw/2,cy,cx,cy+dh/2);
+      
+  <!-- ============================================================ -->
+  <!-- PDF GENERATOR — COM INJEÇÃO PERFEITA DAS IMAGENS DA TELA -->
+  <!-- ============================================================ -->
+  <script>
+    function fillTriangle(doc,x1,y1,x2,y2,x3,y3){
+      doc.lines([[x2-x1,y2-y1],[x3-x2,y3-y2],[x1-x3,y1-y3]],x1,y1,[1,1],"F",true);
+    }
+
+    function drawWealthSymbol(doc,cx,cy,scale){
+      var s=scale||1;
+      var dw=30*s,dh=40*s;
+      doc.setFillColor(11,42,82);
+      fillTriangle(doc,cx,cy-dh/2,cx+dw/2,cy,cx,cy+dh/2);
+      fillTriangle(doc,cx,cy-dh/2,cx-dw/2,cy,cx,cy+dh/2);
+      var iw=22*s,ih=30*s;
+      doc.setFillColor(20,60,120);
+      fillTriangle(doc,cx,cy-ih/2,cx+iw/2,cy,cx,cy+ih/2);
+      fillTriangle(doc,cx,cy-ih/2,cx-iw/2,cy,cx,cy+ih/2);
+      doc.setFillColor(56,189,248);
+      var aw=4*s,ah=16*s;
+      doc.rect(cx-aw/2,cy-2*s,aw,ah,"F");
+      var tipW=12*s,tipY=cy-2*s;
+      fillTriangle(doc,cx-tipW/2,tipY,cx+tipW/2,tipY,cx,tipY-9*s);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(Math.round(7*s));
+      doc.setTextColor(200,220,255);
+      doc.text("PROSPERIDADE",cx,cy+14*s,{align:"center"});
+      var dotY=cy+dh/2+10*s;var dotR=2.2*s;
+      var colors=[[220,38,38],[217,70,239],[234,88,12],[139,92,246],[20,184,166],
+        [202,138,4],[21,101,192],[249,168,37],[15,118,110],[6,78,59]];
+      for(var i=0;i<10;i++){
+        var dx=cx-4.5*6*s+i*6*s;
+        doc.setFillColor(colors[i][0],colors[i][1],colors[i][2]);
+        doc.circle(dx,dotY,dotR,"F");
+      }
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(Math.round(5.5*s));
+      doc.setTextColor(100,116,139);
+      doc.text("10 Áreas Da Prosperidade",cx,dotY+7*s,{align:"center"});
+    }
+
+    function stripHtml(html){
+      return String(html||"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+    }
+
+    async function downloadPDFHandler() {
+      var btn = document.getElementById("btn-download");
+      var oldText = btn.innerHTML;
+      btn.innerHTML = "⏳ Gerando PDF, aguarde...";
+      btn.style.opacity = "0.7";
+      btn.style.pointerEvents = "none";
+      try {
+        await generatePDF('download');
+      } catch(e) {
+        console.error(e);
+        alert("Erro ao gerar PDF.");
+      }
+      btn.innerHTML = oldText;
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+    }
+
+    // ============================================================
+    // GERAÇÃO DO PDF (Agora Assíncrona com Injeção de Imagens)
+    // ============================================================
+    async function generatePDF(mode){
+      if(!computedResults){
+         if(mode !== 'base64') alert("Nenhum resultado para gerar o PDF.");
+         return "";
+      }
+      var jsPDFClass=window.jspdf.jsPDF;
+      var doc=new jsPDFClass("p","mm","a4");
+      var W=210,H=297,margin=16,cW=W-margin*2;
+      var y=margin;
+      var areas=computedResults.areas;var ranked=computedResults.ranked;
+      var totalScore=computedResults.totalScore;var avgScore=computedResults.avgScore;
+      var categoria=computedResults.categoria;
+      var userName=toTitleCase(document.getElementById("name").value.trim());
+      var userEmail=document.getElementById("email").value.trim();
+      var userWhatsApp=document.getElementById("whatsapp").value.trim();
+      var userAge=document.getElementById("age").value.trim();
+      var userEducation=document.getElementById("education").value||"Não informado";
+      var userProfession=document.getElementById("profession").value.trim()||"Não informado";
+      var currentDate=new Date().toLocaleDateString("pt-BR");
+
+      var headerBlue=[34,84,138],darkBlue=[6,59,122],navy=[11,42,82];
+      var dark=[15,23,42],gray=[71,85,105],lightGray=[100,116,139];
+      var blue=[11,99,206],lightBg=[244,249,255];
+
+      function drawPageHeader(){
+        doc.setFillColor(headerBlue[0],headerBlue[1],headerBlue[2]);
+        doc.rect(0,0,W,12,"F");
+        doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(9);
+        doc.text(PESQUISA_NOME,margin,8);
+        doc.setFontSize(8);
+        doc.text(userName.substring(0,35),W-margin,8,{align:"right"});
+        y=margin+10;
+      }
+      function drawPageFooter(){
+        doc.setDrawColor(headerBlue[0],headerBlue[1],headerBlue[2]);
+        doc.setLineWidth(0.5);
+        doc.line(margin,H-20,W-margin,H-20);
+        doc.setFont("helvetica","bold");doc.setFontSize(7);
+        doc.setTextColor(navy[0],navy[1],navy[2]);
+        doc.text("Instituto Impulso IE\u2122",margin,H-14);
+        doc.setFont("helvetica","normal");
+        doc.setTextColor(gray[0],gray[1],gray[2]);
+        doc.text("Rogério Braga - Especialista em Inteligência Emocional",W-margin,H-14,{align:"right"});
+        doc.setFont("helvetica","italic");doc.setFontSize(6.5);
+        doc.setTextColor(lightGray[0],lightGray[1],lightGray[2]);
+        doc.text("A mudança pode acontecer em um instante",W/2,H-8,{align:"center"});
+      }
+      function addPage(){drawPageFooter();doc.addPage();drawPageHeader();}
+      function checkSpace(needed){if(y+needed>H-28)addPage();}
+      function addSectionTitle(text){
+        checkSpace(18);y+=4;
+        doc.setFillColor(248,250,252);doc.rect(margin,y-5,cW,8,"F");
+        doc.setDrawColor(blue[0],blue[1],blue[2]);doc.setLineWidth(2);
+        doc.line(margin,y-5,margin,y+3);
+        doc.setFont("helvetica","bold");doc.setFontSize(14);
+        doc.setTextColor(navy[0],navy[1],navy[2]);
+        doc.text(text.toUpperCase(),margin+4,y+1);y+=10;
+      }
+      function addProgressBar(label,value,color){
+        checkSpace(14);
+        doc.setFont("helvetica","bold");doc.setFontSize(9);
+        doc.setTextColor(navy[0],navy[1],navy[2]);
+        doc.text(label,margin,y);
+        doc.text(value.toFixed(1)+"/10",margin+cW,y,{align:"right"});
+        y+=4;
+        doc.setFillColor(225,235,248);
+        doc.roundedRect(margin,y,cW,5,2.5,2.5,"F");
+        var fillW=Math.max(0,(value/10)*cW);
+        doc.setFillColor(color[0],color[1],color[2]);
+        doc.roundedRect(margin,y,fillW,5,2.5,2.5,"F");
+        y+=9;
+      }
+
+      // ===== CAPA =====
+      doc.setFillColor(255,255,255);doc.rect(0,0,W,H,"F");
+      doc.setFillColor(225,235,248);fillTriangle(doc,0,0,W,0,0,60);
+      doc.setFillColor(210,225,242);fillTriangle(doc,W,0,W,52,0,26);
+      doc.setFillColor(34,84,138);fillTriangle(doc,0,0,W,0,W,38);
+      doc.setFillColor(76,123,176);fillTriangle(doc,0,H,W,H,0,H-42);
+      doc.setFillColor(28,76,128);fillTriangle(doc,0,H,W,H,W,H-52);
+
+      doc.setFont("helvetica","bold");doc.setFontSize(22);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("Instituto Impulso IE\u2122",W/2,67,{align:"center"});
+      doc.setFont("helvetica","normal");doc.setFontSize(15);
+      doc.setTextColor(80,80,80);
+      doc.text("Resultado da Pesquisa",W/2,102,{align:"center"});
+      doc.setFont("helvetica","bold");doc.setFontSize(22);
+      doc.setTextColor(blue[0],blue[1],blue[2]);
+      doc.text(PESQUISA_NOME,W/2,114,{align:"center"});
+
+      drawWealthSymbol(doc,W/2,175,1.4);
+
+      doc.setFont("helvetica","bold");doc.setFontSize(14);
+      doc.setTextColor(255,255,255);
+      doc.text(PESQUISA_NOME,18,272);
+      doc.setFont("helvetica","normal");doc.setFontSize(9);
+      doc.setTextColor(200,215,240);
+      doc.text("A Mudança Pode Acontecer Em Um Instante",18,281);
+      doc.setFont("helvetica","bold");doc.setFontSize(16);
+      doc.setTextColor(255,255,255);
+      doc.text(userName,W-margin,272,{align:"right"});
+      doc.setFont("helvetica","normal");doc.setFontSize(9);
+      doc.setTextColor(200,215,240);
+      doc.text(currentDate,W-margin,281,{align:"right"});
+
+      // ===== PÁG 2: DADOS + RADAR =====
+      doc.addPage();drawPageHeader();
+      addSectionTitle("1. Seus Dados");
+
+      var infoRows=[
+        ["Nome",userName,"Idade",userAge+" anos"],
+        ["Profissão",userProfession,"Escolaridade",userEducation],
+        ["E-mail",userEmail,"WhatsApp",userWhatsApp],
+        ["Score Total",totalScore+"/500","Categoria",categoria.label],
+        ["Nota Média",avgScore.toFixed(1)+"/10","Data",currentDate]
+      ];
+      doc.setFontSize(9);
+      infoRows.forEach(function(row){
+        checkSpace(6);
+        doc.setFont("helvetica","bold");
+        doc.setTextColor(lightGray[0],lightGray[1],lightGray[2]);
+        doc.text(row[0]+":",margin,y);
+        doc.setFont("helvetica","normal");
+        doc.setTextColor(51,51,51);
+        doc.text(String(row[1]),margin+28,y);
+        doc.setFont("helvetica","bold");
+        doc.setTextColor(lightGray[0],lightGray[1],lightGray[2]);
+        doc.text(row[2]+":",margin+95,y);
+        doc.setFont("helvetica","normal");
+        doc.setTextColor(51,51,51);
+        doc.text(String(row[3]),margin+123,y);
+        y+=6;
+      });
+      y+=4;
+
+      // ===== RADAR =====
+      addSectionTitle("2. Sua Roda da Prosperidade (Radar)");
+      
+      // Captura do Gráfico Radar Diretamente da Tela!
+      var radarBase64 = await getSvgAsBase64Png("radarSvg", 900, 720);
+      if(radarBase64) {
+        var rW = 160; 
+        var rH = rW * (720/900); // Mantém a proporção real
+        doc.addImage("data:image/png;base64," + radarBase64, "PNG", (W-rW)/2, y, rW, rH);
+        y += rH + 10;
+      }
+
+      checkSpace(12);
+      doc.setFont("helvetica","bold");doc.setFontSize(11);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("Score: "+totalScore+"/500  |  Média: "+avgScore.toFixed(1)+"/10  |  "+categoria.label,W/2,y,{align:"center"});
+      y+=4;
+      doc.setFont("helvetica","normal");doc.setFontSize(8);
+      doc.setTextColor(gray[0],gray[1],gray[2]);
+      doc.text(Math.round((totalScore/500)*100)+"% do máximo possível",W/2,y,{align:"center"});
+      y+=10;
+      drawPageFooter();
+
+      // ===== PÁG 3: GRÁFICO PIZZA =====
+      doc.addPage();drawPageHeader();
+      addSectionTitle("3. Distribuição em Pizza");
+      doc.setFont("helvetica","normal");doc.setFontSize(9);
+      doc.setTextColor(gray[0],gray[1],gray[2]);
+      doc.text("Veja como cada área contribui no seu resultado total. Quanto maior a fatia, maior é sua pontuação naquela área.",margin,y,{maxWidth:cW});
+      y+=10;
+
+      // Captura do Gráfico de Pizza Diretamente da Tela!
+      var donutBase64 = await getSvgAsBase64Png("donutSvg", 400, 400);
+      if(donutBase64) {
+        var dW = 100; 
+        var dH = 100;
+        doc.addImage("data:image/png;base64," + donutBase64, "PNG", (W-dW)/2, y, dW, dH);
+        y += dH + 10;
+      }
+
+      // Legenda da Pizza (Criada via código no PDF)
+      var totalSum=areas.reduce(function(s,a){return s+a.total;},0);
+      if(totalSum===0)totalSum=1;
+      
+      checkSpace(70);
+      doc.setFont("helvetica","bold");doc.setFontSize(10);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("Legenda:",margin,y);y+=6;
+      doc.setFontSize(8);
+      var col2x=margin+cW/2;
+      areas.forEach(function(area,i){
+        var c=area.color;var pct=Math.round((area.total/totalSum)*100);
+        var colX=i<5?margin:col2x;
+        var rowY=y+(i%5)*6;
+        doc.setFillColor(c[0],c[1],c[2]);
+        doc.rect(colX,rowY-3,3.5,3.5,"F");
+        doc.setFont("helvetica","normal");
+        doc.setTextColor(dark[0],dark[1],dark[2]);
+        var nameTxt=area.name.length>22?area.name.substring(0,20)+"...":area.name;
+        doc.text(nameTxt,colX+5,rowY);
+        doc.setFont("helvetica","bold");
+        doc.setTextColor(navy[0],navy[1],navy[2]);
+        doc.text(pct+"%",colX+cW/2-8,rowY,{align:"right"});
+      });
+      y+=5*6+8;
+      drawPageFooter();
+
+      // ===== PÁG 4: BARRAS =====
+      doc.addPage();drawPageHeader();
+      addSectionTitle("4. Mapeamento das 10 Áreas (Barras)");
+      doc.setFont("helvetica","normal");doc.setFontSize(9);
+      doc.setTextColor(gray[0],gray[1],gray[2]);
+      doc.text("Ranking visual das suas áreas, da mais forte à mais fraca.",margin,y,{maxWidth:cW});
+      y+=8;
+      ranked.forEach(function(area){
+        var barColor=area.avg>=7?[20,184,166]:area.avg>=4?[251,146,60]:[248,113,113];
+        addProgressBar(area.icon+" "+area.name,area.avg,barColor);
+      });
+      y+=6;
+      checkSpace(10);
+      doc.setFont("helvetica","bold");doc.setFontSize(11);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("Score Total: "+totalScore+"/500 • Média: "+avgScore.toFixed(1)+" • "+categoria.label,margin,y);
+      y+=10;
+      drawPageFooter();
+
+      // ===== DETALHAMENTO =====
+      doc.addPage();drawPageHeader();
+      addSectionTitle("5. Detalhamento por Área");
+      ranked.forEach(function(area,idx){
+        checkSpace(55);
+        doc.setFillColor(lightBg[0],lightBg[1],lightBg[2]);
+        doc.roundedRect(margin,y,cW,8,3,3,"F");
+        doc.setFont("helvetica","bold");doc.setFontSize(10);
+        doc.setTextColor(darkBlue[0],darkBlue[1],darkBlue[2]);
+        doc.text((idx+1)+"º — "+area.icon+" "+area.name,margin+4,y+5.5);
+        doc.setFontSize(8);
+        doc.setTextColor(gray[0],gray[1],gray[2]);
+        doc.text("Total: "+area.total+"/50 | Média: "+area.avg+" | "+getBadgeLabel(area.avg),margin+100,y+5.5);
+        y+=11;
+        doc.setFillColor(226,232,240);
+        doc.roundedRect(margin,y,cW,4,2,2,"F");
+        var barW=Math.max(1,(area.avg/10)*cW);
+        var barColor=area.avg>=7?[20,184,166]:area.avg>=4?[251,146,60]:[248,113,113];
+        doc.setFillColor(barColor[0],barColor[1],barColor[2]);
+        doc.roundedRect(margin,y,barW,4,2,2,"F");
+        y+=7;
+        doc.setFontSize(8);
+        area.items.forEach(function(item){
+          checkSpace(6);
+          doc.setFont("helvetica","normal");
+          doc.setTextColor(dark[0],dark[1],dark[2]);
+          var shortName=item.name.length>72?item.name.substring(0,70)+"...":item.name;
+          doc.text("• "+shortName,margin+4,y);
+          var itemColor=item.score>=7?[15,118,110]:item.score>=4?[217,119,6]:[220,38,38];
+          doc.setFont("helvetica","bold");
+          doc.setTextColor(itemColor[0],itemColor[1],itemColor[2]);
+          doc.text(item.score+"/10",margin+cW-12,y);
+          y+=5;
+        });
+        y+=3;
+        checkSpace(12);
+        doc.setFont("helvetica","italic");doc.setFontSize(7);
+        doc.setTextColor(gray[0],gray[1],gray[2]);
+        var descLines=doc.splitTextToSize(area.desc,cW-8);
+        doc.text(descLines,margin+4,y);
+        y+=descLines.length*3.5+8;
+      });
+      drawPageFooter();
+
+      // ===== PÁG: ANÁLISE FINAL — NOVO =====
+      doc.addPage();drawPageHeader();
+      addSectionTitle("6. Análise Final — Sua Categoria de Prosperidade");
+
+      // Big grade box
+      checkSpace(45);
+      var boxY=y;
+      doc.setFillColor(lightBg[0],lightBg[1],lightBg[2]);
+      doc.roundedRect(margin,boxY,cW,40,6,6,"F");
+      doc.setDrawColor(categoria.color[0],categoria.color[1],categoria.color[2]);
+      doc.setLineWidth(2);
+      doc.line(margin,boxY,margin,boxY+40);
+
+      // Grade circle
+      var gcx=margin+22,gcy=boxY+20;
+      doc.setFillColor(categoria.color[0],categoria.color[1],categoria.color[2]);
+      doc.circle(gcx,gcy,16,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(20);
+      doc.setTextColor(255,255,255);
+      doc.text(avgScore.toFixed(1),gcx,gcy+1,{align:"center"});
+      doc.setFontSize(7);
+      doc.text("de 10",gcx,gcy+8,{align:"center"});
+
+      // Category info
+      doc.setFont("helvetica","bold");doc.setFontSize(15);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text(categoria.emoji+" "+categoria.label,margin+44,boxY+13);
+      doc.setFont("helvetica","normal");doc.setFontSize(9);
+      doc.setTextColor(gray[0],gray[1],gray[2]);
+      doc.text("Faixa: "+categoria.range+"  •  Score Total: "+totalScore+"/500",margin+44,boxY+20);
+      var shortLines=doc.splitTextToSize(categoria.short,cW-50);
+      doc.setFontSize(9);doc.setTextColor(dark[0],dark[1],dark[2]);
+      doc.text(shortLines,margin+44,boxY+27);
+
+      y=boxY+45;
+
+      // Full analysis text
+      checkSpace(50);
+      doc.setFont("helvetica","bold");doc.setFontSize(11);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("Análise Detalhada:",margin,y);
+      y+=7;
+      doc.setFont("helvetica","normal");doc.setFontSize(9.5);
+      doc.setTextColor(dark[0],dark[1],dark[2]);
+      var fullText=stripHtml(categoria.text);
+      var fullLines=doc.splitTextToSize(fullText,cW);
+      fullLines.forEach(function(line){
+        checkSpace(6);
+        doc.text(line,margin,y);
+        y+=5;
+      });
+      y+=6;
+
+      // ===== ESCALA DAS 5 CATEGORIAS =====
+      checkSpace(60);
+      doc.setFont("helvetica","bold");doc.setFontSize(11);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("As 5 Categorias de Prosperidade:",margin,y);
+      y+=8;
+
+      var categoriasInfo=[
+        {idx:1,label:"Despertar Necessário",emoji:"!",range:"0.0 - 2.0",color:[220,38,38],
+          desc:"Hora de acordar. Foque em uma única área pra começar."},
+        {idx:2,label:"Construtor Iniciante",emoji:"*",range:"2.1 - 4.0",color:[234,88,12],
+          desc:"Construindo as bases. Foco em Saúde, Emoções e Propósito."},
+        {idx:3,label:"Empreendedor em Formação",emoji:"#",range:"4.1 - 6.0",color:[202,138,4],
+          desc:"Boa base, precisa equilibrar. Foco em plano de 90 dias."},
+        {idx:4,label:"Próspero em Crescimento",emoji:">",range:"6.1 - 8.0",color:[22,163,74],
+          desc:"Caminhando com solidez. Hora de acelerar com mentoria."},
+        {idx:5,label:"Mestre da Prosperidade",emoji:"+",range:"8.1 - 10.0",color:[15,118,110],
+          desc:"Nível elite. Foque em legado, mentoria e multiplicação."}
+      ];
+
+      categoriasInfo.forEach(function(cat){
+        checkSpace(13);
+        var isCurrent=(cat.idx===categoria.idx);
+        if(isCurrent){
+          doc.setFillColor(cat.color[0],cat.color[1],cat.color[2]);
+          doc.roundedRect(margin,y-2,cW,11,2,2,"F");
+        }else{
+          doc.setFillColor(248,250,252);
+          doc.roundedRect(margin,y-2,cW,11,2,2,"F");
+        }
+        doc.setFillColor(cat.color[0],cat.color[1],cat.color[2]);
+        doc.circle(margin+5,y+3,2.2,"F");
+        doc.setFont("helvetica","bold");doc.setFontSize(9.5);
+        doc.setTextColor(isCurrent?255:dark[0],isCurrent?255:dark[1],isCurrent?255:dark[2]);
+        doc.text(cat.label,margin+11,y+2);
+        doc.setFontSize(7.5);
+        doc.setTextColor(isCurrent?240:lightGray[0],isCurrent?240:lightGray[1],isCurrent?240:lightGray[2]);
+        doc.text("Nota "+cat.range,margin+11,y+6.5);
+        doc.setFont("helvetica","normal");doc.setFontSize(7.5);
+        doc.setTextColor(isCurrent?245:gray[0],isCurrent?245:gray[1],isCurrent?245:gray[2]);
+        var descTxt=cat.desc.length>62?cat.desc.substring(0,60)+"...":cat.desc;
+        doc.text(descTxt,margin+76,y+4.5);
+        if(isCurrent){
+          doc.setFont("helvetica","bold");doc.setFontSize(8);
+          doc.setTextColor(255,255,255);
+          doc.text("◀ VOCÊ ESTÁ AQUI",W-margin-2,y+4.5,{align:"right"});
+        }
+        y+=12.5;
+      });
+
+      drawPageFooter();
+
+      // ===== INSIGHTS + PRÓXIMOS PASSOS =====
+      doc.addPage();drawPageHeader();
+      addSectionTitle("7. Dicas Estratégicas");
+      var insightsData=[
+        {title:"Áreas Fortes (Média 8-10)",color:[15,118,110],
+          text:"Essas são as áreas onde você manda bem! São seu diferencial. Use elas como alavanca pra puxar as outras pra cima. Quem trabalha a partir dos pontos fortes é 6x mais engajado e 3x mais produtivo. Mantenha o ritmo e use como base pra liderar."},
+        {title:"Áreas Pra Melhorar (Média 5-7)",color:[217,119,6],
+          text:"Aqui tá o maior potencial de crescimento. Pequenas ações já geram saltos grandes. Foque, planeje cursos e mentorias específicas, e meça a evolução. Cada ponto que você ganha aqui tem efeito multiplicador no seu resultado total."},
+        {title:"Áreas Críticas (Média 0-4)",color:[220,38,38],
+          text:"Atenção total! Essas áreas estão segurando todo o resto. 1) Estude: busque conteúdo bom sobre o tema; 2) Mentoria: ande com quem domina isso; 3) Aja já: comece com pequenos hábitos diários e veja a evolução toda semana."}
+      ];
+      insightsData.forEach(function(insight){
+        checkSpace(40);
+        doc.setDrawColor(insight.color[0],insight.color[1],insight.color[2]);
+        doc.setLineWidth(1.2);
+        doc.line(margin,y,margin,y+28);
+        doc.setFont("helvetica","bold");doc.setFontSize(10);
+        doc.setTextColor(insight.color[0],insight.color[1],insight.color[2]);
+        doc.text(insight.title,margin+5,y+5);
+        doc.setFont("helvetica","normal");doc.setFontSize(8);
+        doc.setTextColor(gray[0],gray[1],gray[2]);
+        var insightLines=doc.splitTextToSize(insight.text,cW-12);
+        doc.text(insightLines,margin+5,y+12);
+        y+=insightLines.length*4+24;
+      });
+
+      y+=8;
+      checkSpace(30);
+      addSectionTitle("8. Próximos Passos");
+      var steps=[
+        "1. Identifique suas 3 áreas mais fortes e use elas como alavanca pras outras.",
+        "2. Escolha 2 áreas pra melhorar e defina 3 ações práticas pra cada uma nas próximas 4 semanas.",
+        "3. Pra áreas críticas, busque mentoria e crie um plano com metas semanais.",
+        "4. Refaça esta análise em 90 dias pra medir sua evolução.",
+        "5. Compartilhe seus resultados com seu mentor ou coach pra ter accountability."
+      ];
+      doc.setFont("helvetica","normal");doc.setFontSize(8.5);
+      doc.setTextColor(dark[0],dark[1],dark[2]);
+      steps.forEach(function(step){
+        checkSpace(10);
+        var stepLines=doc.splitTextToSize(step,cW-8);
+        doc.text(stepLines,margin+4,y);
+        y+=stepLines.length*4+4;
+      });
+
+      y+=8;
+      checkSpace(25);
+      doc.setDrawColor(219,234,254);doc.setLineWidth(0.5);
+      doc.line(margin,y,W-margin,y);y+=6;
+      doc.setFont("helvetica","italic");doc.setFontSize(7);
+      doc.setTextColor(lightGray[0],lightGray[1],lightGray[2]);
+      var disclaimer="Este relatório foi gerado pelo sistema "+PESQUISA_NOME+
+        " — Método Impulso. Os resultados refletem a autoavaliação na data de realização e servem como ferramenta de diagnóstico. Recomenda-se acompanhamento profissional para aprofundamento.";
+      var disclaimerLines=doc.splitTextToSize(disclaimer,cW);
+      doc.text(disclaimerLines,margin,y);
+      y+=disclaimerLines.length*3+6;
+      doc.setFont("helvetica","bold");doc.setFontSize(9);
+      doc.setTextColor(navy[0],navy[1],navy[2]);
+      doc.text("Instituto Impulso IE\u2122 — Rogério Braga",W/2,y,{align:"center"});
+      y+=4;
+      doc.setFont("helvetica","italic");doc.setFontSize(7);
+      doc.setTextColor(lightGray[0],lightGray[1],lightGray[2]);
+      doc.text("Especialista em Inteligência Emocional | A mudança pode acontecer em um instante",W/2,y,{align:"center"});
+      drawPageFooter();
+
+      // MUDANÇA AQUI: Se for pra retornar em Base64 para a API, devolve a String
+      if (mode === 'base64') {
+        var dataUri = doc.output('datauristring');
+        return dataUri.split(',')[1];
+      }
+
+      // Se não, salva na máquina do usuário normalmente
+      var fileName="Roda_Prosperidade_"+userName.replace(/\s+/g,"_")+"_"+new Date().toISOString().slice(0,10)+".pdf";
+      doc.save(fileName);
+    }
+
+    document.addEventListener("DOMContentLoaded",function(){
+      validateForm();
+      console.log("🎯 "+PESQUISA_NOME+" | "+TOTAL_Q+" perguntas | "+areasData.length+" áreas | Score max: 500");
+    });
+  </script>
+</body>
+</html>
